@@ -26,6 +26,10 @@ android {
         jvmTarget = env.javaVersion.toString()
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -43,6 +47,7 @@ dependencies {
     implementation deps.app.androidx.constraintlayout
     implementation deps.app.androidx.core
 
+    implementation deps.app.google.location
     implementation deps.app.google.maps
     implementation deps.app.google.material
 
@@ -50,12 +55,24 @@ dependencies {
     kapt deps.app.google.dagger.compiler
     compileOnly deps.app.misc.javaxAnnotations
 
+    implementation deps.app.rxjava.rxandroid
+    implementation deps.app.rxjava.rxjava
+    implementation deps.app.rxjava.rxjavabridge
+    implementation deps.app.rxjava.rxkotlin
+
+    testImplementation deps.test.androidx.archcore
+    testImplementation deps.test.androidx.core
     testImplementation deps.test.assertjCore
     testImplementation deps.test.hamcrest.core
     testImplementation deps.test.hamcrest.library
     testImplementation deps.test.hamcrest.integration
     testImplementation deps.test.junit
     testImplementation deps.test.kotlinTest
+    testImplementation deps.test.mockito.core
+    testImplementation deps.test.mockito.inline
+    testImplementation dependencies.create(deps.test.mockito.kotlin) {
+        exclude group: 'org.jetbrains.kotlin'
+    }
 
     androidTestImplementation deps.test.androidx.androidJUnit
     androidTestImplementation deps.test.androidx.espresso
