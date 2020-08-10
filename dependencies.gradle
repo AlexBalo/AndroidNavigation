@@ -25,13 +25,21 @@ ext {
 
       // Google
       dagger              : "2.28",
+      location            : "16.0.0",
       maps                : "17.0.0",
       material            : "1.2.0-beta01",
+
+      // RxJava
+      rxjava              : "3.0.4",
+      rxjavaBridge        : "3.0.0",
+      rxAndroid           : "3.0.0",
+      rxKotlin            : "3.0.0",
 
       // Misc
       javaxAnnotations    : "10.0-b28",
 
       // Tests
+      archCore            : "2.0.1",
       androidTestCore     : "1.2.0",
       androidTestUnit     : "1.1.1",
       assertj             : "3.16.1",
@@ -61,15 +69,23 @@ ext {
                   core    : "com.google.dagger:dagger:${versions.dagger}",
                   compiler: "com.google.dagger:dagger-compiler:${versions.dagger}",
               ],
+              location  : "com.google.android.gms:play-services-location:${versions.location}",
               maps      : "com.google.android.gms:play-services-maps:${versions.maps}",
               material  : "com.google.android.material:material:${versions.material}",
           ],
           misc        : [
               javaxAnnotations : "org.glassfish:javax.annotation:${versions.javaxAnnotations}",
           ],
+          rxjava      : [
+              rxjava      : "io.reactivex.rxjava3:rxjava:${versions.rxJava}",
+              rxjavabridge: "com.github.akarnokd:rxjava3-bridge:${versions.rxjavaBridge}",
+              rxandroid   : "io.reactivex.rxjava3:rxandroid:${versions.rxAndroid}",
+              rxkotlin    : "io.reactivex.rxjava3:rxkotlin:${versions.rxKotlin}",
+          ],
       ],
       test: [
           androidx   : [
+              archcore    : "androidx.arch.core:core-testing:${versions.archCore}",
               androidJUnit: "androidx.test.ext:junit:${versions.androidTestUnit}",
               core        : "androidx.test:core:${versions.androidTestCore}",
               espresso    : "androidx.test.espresso:espresso-core:${versions.espresso}",

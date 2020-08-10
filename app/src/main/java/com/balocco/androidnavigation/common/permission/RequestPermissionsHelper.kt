@@ -1,6 +1,5 @@
 package com.balocco.androidnavigation.common.permission
 
-import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.view.View
@@ -49,9 +48,5 @@ class RequestPermissionsHelper @Inject constructor(
         return when (this) {
             Permission.FINE_LOCATION -> R.string.access_location
         }
-    }
-
-    enum class Permission(val value: String) {
-        FINE_LOCATION(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
