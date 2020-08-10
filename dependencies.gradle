@@ -25,6 +25,7 @@ ext {
 
       // Google
       maps                : "17.0.0",
+      material            : "1.2.0-beta01",
 
       // Tests
       androidTestCore     : "1.2.0",
@@ -52,7 +53,8 @@ ext {
           ],
           kotlin      : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
           google      : [
-              maps: "com.google.android.gms:play-services-maps:${versions.maps}",
+              maps      : "com.google.android.gms:play-services-maps:${versions.maps}",
+              material  : "com.google.android.material:material:${versions.material}",
           ],
       ],
       test: [

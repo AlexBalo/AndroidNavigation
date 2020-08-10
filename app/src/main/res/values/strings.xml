@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">AndroidNavigation</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="access_location">Location access is needed to show your location on the map</string>
+    <string name="dialog_confirm">CONFIRM</string>
 </resources>
