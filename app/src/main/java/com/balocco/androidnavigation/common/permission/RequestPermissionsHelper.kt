@@ -7,8 +7,9 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import com.balocco.androidnavigation.R
 import com.google.android.material.snackbar.Snackbar
+import javax.inject.Inject
 
-class RequestPermissionsHelper constructor(
+class RequestPermissionsHelper @Inject constructor(
     private val activity: Activity
 ) {
 

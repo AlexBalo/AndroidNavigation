@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion env.compileSdk
@@ -44,6 +45,10 @@ dependencies {
 
     implementation deps.app.google.maps
     implementation deps.app.google.material
+
+    implementation deps.app.google.dagger.core
+    kapt deps.app.google.dagger.compiler
+    compileOnly deps.app.misc.javaxAnnotations
 
     testImplementation deps.test.assertjCore
     testImplementation deps.test.hamcrest.core
