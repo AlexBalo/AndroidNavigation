@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import com.balocco.androidnavigation.R
 import com.google.android.material.snackbar.Snackbar
 
@@ -16,18 +15,17 @@ class RequestPermissionsHelper constructor(
     fun requestPermission(
         permission: Permission,
         requestCode: Int,
-        containerView: View,
-        fragment: Fragment? = null
+        containerView: View
     ) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission.value)) {
             Snackbar.make(
                 containerView, permission.resourceForPermissionRationale(),
                 Snackbar.LENGTH_INDEFINITE
             ).setAction(R.string.dialog_confirm) {
-                requestPermissionFromActivityOrFragment(fragment, permission, requestCode)
+                requestPermissionFromActivityOrFragment(permission, requestCode)
             }.show()
         } else {
-            requestPermissionFromActivityOrFragment(fragment, permission, requestCode)
+            requestPermissionFromActivityOrFragment(permission, requestCode)
         }
     }
 
@@ -40,15 +38,10 @@ class RequestPermissionsHelper constructor(
                 grantResults[0] == PackageManager.PERMISSION_GRANTED
 
     private fun requestPermissionFromActivityOrFragment(
-        fragment: Fragment?,
         permission: Permission,
         requestCode: Int
     ) {
-        if (fragment == null) {
-            ActivityCompat.requestPermissions(activity, arrayOf(permission.value), requestCode)
-        } else {
-            fragment.requestPermissions(arrayOf(permission.value), requestCode)
-        }
+        ActivityCompat.requestPermissions(activity, arrayOf(permission.value), requestCode)
     }
 
     private fun Permission.resourceForPermissionRationale(): Int {
