@@ -11,7 +11,7 @@ class MapsSubcomponentsModule {
 
     @Provides
     @ActivityScope
-    fun provideUserLocationProvider(
+    fun provideUserLocationProviderClient(
         fusedLocationProviderClient: FusedLocationProviderClient
     ): UserLocationDataSource =
         UserLocationDataSource(
