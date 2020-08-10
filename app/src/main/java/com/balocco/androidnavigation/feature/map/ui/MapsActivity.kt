@@ -1,23 +1,26 @@
-package com.balocco.androidnavigation.feature.ui
+package com.balocco.androidnavigation.feature.map.ui
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.balocco.androidcomponents.di.AppComponent
 import com.balocco.androidnavigation.R
 import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
+import com.balocco.androidnavigation.common.ui.BaseActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import javax.inject.Inject
 
 private const val PERMISSION_REQUEST_ACCESS_LOCATION = 999
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : BaseActivity(), OnMapReadyCallback {
+
+    @Inject lateinit var permissionsHelper: RequestPermissionsHelper
 
     private lateinit var map: GoogleMap
-    private lateinit var permissionsHelper: RequestPermissionsHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         permissionsHelper = RequestPermissionsHelper(this)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
+
+    override fun onInject(appComponent: AppComponent) {
+        appComponent.mapsComponent().create(this).inject(this)
     }
 
     override fun onRequestPermissionsResult(
