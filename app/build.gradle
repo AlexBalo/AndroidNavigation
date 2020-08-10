@@ -43,6 +43,7 @@ dependencies {
     implementation deps.app.androidx.core
 
     implementation deps.app.google.maps
+    implementation deps.app.google.material
 
     testImplementation deps.test.assertjCore
     testImplementation deps.test.hamcrest.core
