@@ -2,10 +2,13 @@ package com.balocco.androidnavigation.feature.map.ui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.balocco.androidcomponents.di.AppComponent
 import com.balocco.androidnavigation.R
 import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
 import com.balocco.androidnavigation.common.ui.BaseActivity
+import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
+import com.balocco.androidnavigation.feature.map.viewmodel.MapsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,9 +21,11 @@ private const val PERMISSION_REQUEST_ACCESS_LOCATION = 999
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
+    @Inject lateinit var viewModelFactory: ViewModelFactory
     @Inject lateinit var permissionsHelper: RequestPermissionsHelper
 
     private lateinit var map: GoogleMap
+    private lateinit var viewModel: MapsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +34,9 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         permissionsHelper = RequestPermissionsHelper(this)
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        viewModel =
+            ViewModelProvider(viewModelStore, viewModelFactory).get(MapsViewModel::class.java)
     }
 
     override fun onInject(appComponent: AppComponent) {

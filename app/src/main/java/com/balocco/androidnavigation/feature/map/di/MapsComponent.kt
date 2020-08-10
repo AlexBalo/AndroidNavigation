@@ -8,7 +8,8 @@ import dagger.Subcomponent
 
 @ActivityScope
 @Subcomponent(
-    modules = []
+    modules = [
+        MapsViewModelModule::class]
 )
 interface MapsComponent {
 
