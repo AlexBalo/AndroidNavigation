@@ -16,6 +16,9 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
+private const val CENTER = "15.9,14.8"
+private const val RADIUS = 150.0
+
 class FetchVenuesUseCaseTest {
 
     @Mock lateinit var remoteDataSource: RemoteDataSource
@@ -35,19 +38,20 @@ class FetchVenuesUseCaseTest {
         val venues = listOf(TestUtils.createVenue())
         val venuesResponse = VenuesResponse(venues)
         val venuesResponseWrapper = VenuesResponseWrapper(venuesResponse)
-        whenever(remoteDataSource.fetchVenues()).thenReturn(Single.just(venuesResponseWrapper))
+        whenever(remoteDataSource.fetchVenues(CENTER, RADIUS))
+            .thenReturn(Single.just(venuesResponseWrapper))
         whenever(localDataSource.storeVenues(venues)).thenReturn(Completable.complete())
 
-        useCase().test().assertComplete()
+        useCase(CENTER, RADIUS).test().assertComplete()
 
         verify(localDataSource).storeVenues(venues)
     }
 
     @Test
     fun `When fetching venues with error, notify complete and does not store venues`() {
-        whenever(remoteDataSource.fetchVenues()).thenReturn(Single.error(Throwable()))
+        whenever(remoteDataSource.fetchVenues(CENTER, RADIUS)).thenReturn(Single.error(Throwable()))
 
-        useCase().test().assertComplete()
+        useCase(CENTER, RADIUS).test().assertComplete()
 
         verify(localDataSource, never()).storeVenues(any())
     }
