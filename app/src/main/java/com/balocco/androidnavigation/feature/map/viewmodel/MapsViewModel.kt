@@ -1,5 +1,6 @@
 package com.balocco.androidnavigation.feature.map.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.balocco.androidcomponents.common.scheduler.SchedulerProvider
@@ -33,6 +34,11 @@ class MapsViewModel @Inject constructor(
         } else {
             notifyUserLocationState(State.LOCATION_UNAVAILABLE)
         }
+    }
+
+    fun onMapCenterChanged(newCenter: Location, mapRadius: Double) {
+        Log.e("Idle", "Center: ${newCenter.latitude} : ${newCenter.longitude}")
+        Log.e("Idle", "MapRadius: $mapRadius")
     }
 
     private fun fetchVenues() {
