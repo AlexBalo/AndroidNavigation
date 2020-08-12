@@ -11,6 +11,9 @@ import com.balocco.androidnavigation.common.permission.Permission
 import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
 import com.balocco.androidnavigation.common.ui.BaseActivity
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
+import com.balocco.androidnavigation.feature.map.ui.map.GoogleMapWrapper
+import com.balocco.androidnavigation.feature.map.ui.map.MapAnimator
+import com.balocco.androidnavigation.feature.map.ui.map.MapInfoProvider
 import com.balocco.androidnavigation.feature.map.viewmodel.MapsViewModel
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
@@ -21,12 +24,15 @@ import javax.inject.Inject
 
 private const val PERMISSION_REQUEST_ACCESS_LOCATION = 999
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback,
+class MapsActivity : BaseActivity(),
+    OnMapReadyCallback,
+    GoogleMap.OnCameraIdleListener,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
     @Inject lateinit var permissionsHelper: RequestPermissionsHelper
-    @Inject lateinit var mapCameraAnimator: GoogleMapCameraAnimator
+    @Inject lateinit var mapInfoProvider: MapInfoProvider
+    @Inject lateinit var mapAnimator: MapAnimator
 
     private lateinit var map: GoogleMap
     private lateinit var viewModel: MapsViewModel
@@ -61,9 +67,19 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback,
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mapCameraAnimator.initWithMap(googleMap)
+        val mapInUse = GoogleMapWrapper(googleMap)
+        mapAnimator.initWithMap(mapInUse)
+        mapInfoProvider.initWithMap(mapInUse)
         map = googleMap
+        map.setOnCameraIdleListener(this)
         viewModel.onMapReady()
+    }
+
+    override fun onCameraIdle() {
+        viewModel.onMapCenterChanged(
+            mapInfoProvider.mapCenter(),
+            mapInfoProvider.mapVisibleRadiusInMeters()
+        )
     }
 
     // We need to suppress the warning even though we will enable to user location
@@ -74,7 +90,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback,
             State.PERMISSION_REQUIRED -> requestLocationPermission()
             State.LOCATION_AVAILABLE -> {
                 map.isMyLocationEnabled = true
-                mapCameraAnimator.moveToUserLocation(userLocationState.userLocation)
+                mapAnimator.centerTo(userLocationState.userLocation)
             }
             State.LOCATION_UNAVAILABLE -> { /* At the moment we don't do anything */
             }
