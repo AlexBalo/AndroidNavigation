@@ -55,6 +55,11 @@ dependencies {
     kapt deps.app.google.dagger.compiler
     compileOnly deps.app.misc.javaxAnnotations
 
+    implementation deps.app.squareup.gsonconverter
+    implementation deps.app.squareup.logginginterceptor
+    implementation deps.app.squareup.retrofit
+    implementation deps.app.squareup.rxadapter
+
     implementation deps.app.rxjava.rxandroid
     implementation deps.app.rxjava.rxjava
     implementation deps.app.rxjava.rxjavabridge

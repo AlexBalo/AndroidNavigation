@@ -2,10 +2,7 @@ package com.balocco.androidcomponents.di
 
 import android.content.Context
 import com.balocco.androidnavigation.AndroidNavigationApplication
-import com.balocco.androidnavigation.di.AppSubcomponentsModule
-import com.balocco.androidnavigation.di.LocationModule
-import com.balocco.androidnavigation.di.SchedulersModule
-import com.balocco.androidnavigation.di.ViewModelFactoryModule
+import com.balocco.androidnavigation.di.*
 import com.balocco.androidnavigation.feature.map.di.MapsComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -14,7 +11,9 @@ import dagger.Component
 @ApplicationScope
 @Component(
     modules = [
+        DataModule::class,
         LocationModule::class,
+        NetworkModule::class,
         SchedulersModule::class,
         ViewModelFactoryModule::class,
         AppSubcomponentsModule::class]

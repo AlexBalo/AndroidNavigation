@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.balocco.androidcomponents.common.scheduler.SchedulerProvider
 import com.balocco.androidnavigation.common.viewmodel.BaseViewModel
-import com.balocco.androidnavigation.data.local.UserLocationDataSource
+import com.balocco.androidnavigation.data.local.UserLocationLocalDataSource
 import com.balocco.androidnavigation.data.model.Location
+import com.balocco.androidnavigation.feature.map.domain.FetchVenuesUseCase
 import com.balocco.androidnavigation.feature.map.domain.LocationPermissionGrantedUseCase
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
 import io.reactivex.rxjava3.kotlin.addTo
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 class MapsViewModel @Inject constructor(
     private val schedulerProvider: SchedulerProvider,
-    private val userLocationDataSource: UserLocationDataSource,
+    private val userLocationLocalDataSource: UserLocationLocalDataSource,
+    private val fetchVenuesUseCase: FetchVenuesUseCase,
     private val locationPermissionGrantedUseCase: LocationPermissionGrantedUseCase
 ) : BaseViewModel() {
 
@@ -33,9 +35,17 @@ class MapsViewModel @Inject constructor(
         }
     }
 
+    private fun fetchVenues() {
+        fetchVenuesUseCase()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .subscribe()
+            .addTo(compositeDisposable)
+    }
+
     private fun handleUserLocation() {
         if (locationPermissionGrantedUseCase()) {
-            userLocationDataSource.locationObservable()
+            userLocationLocalDataSource.locationObservable()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(

@@ -35,6 +35,10 @@ ext {
       rxAndroid           : "3.0.0",
       rxKotlin            : "3.0.0",
 
+      // Square
+      okhttp              : "4.8.0",
+      retrofit            : "2.9.0",
+
       // Misc
       javaxAnnotations    : "10.0-b28",
 
@@ -82,6 +86,12 @@ ext {
               rxandroid   : "io.reactivex.rxjava3:rxandroid:${versions.rxAndroid}",
               rxkotlin    : "io.reactivex.rxjava3:rxkotlin:${versions.rxKotlin}",
           ],
+          squareup    : [
+              gsonconverter     : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+              logginginterceptor: "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
+              retrofit          : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+              rxadapter         : "com.squareup.retrofit2:adapter-rxjava3:${versions.retrofit}"
+          ]
       ],
       test: [
           androidx   : [
