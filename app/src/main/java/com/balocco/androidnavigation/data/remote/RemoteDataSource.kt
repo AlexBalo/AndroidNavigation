@@ -10,7 +10,11 @@ private const val API_VERSION = "v2"
 
 interface RemoteDataSource {
     @GET("${API_VERSION}/venues/search")
-    fun fetchVenues(@Query("near") near: String = "Amsterdam"): Single<VenuesResponseWrapper>
+    fun fetchVenues(
+        @Query("ll") center: String,
+        @Query("radius") radius: Double,
+        @Query("limit") limit: Int = 20
+    ): Single<VenuesResponseWrapper>
 
     companion object {
         const val BASE_URL = BASE_URL_INTERNAL

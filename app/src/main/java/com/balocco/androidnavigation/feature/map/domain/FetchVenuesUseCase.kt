@@ -10,8 +10,8 @@ class FetchVenuesUseCase @Inject constructor(
     private val localDataSource: VenuesLocalDataSource
 ) {
 
-    operator fun invoke(): Completable =
-        remoteDataSource.fetchVenues()
+    operator fun invoke(center: String, radius: Double): Completable =
+        remoteDataSource.fetchVenues(center, radius)
             .onErrorComplete()
             .flatMapCompletable { venuesWrapper ->
                 localDataSource.storeVenues(venuesWrapper.response.venues)
