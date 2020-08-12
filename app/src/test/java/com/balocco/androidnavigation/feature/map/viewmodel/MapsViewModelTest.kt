@@ -3,8 +3,9 @@ package com.balocco.androidnavigation.feature.map.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.balocco.androidnavigation.common.scheduler.TestSchedulerProvider
-import com.balocco.androidnavigation.data.local.UserLocationDataSource
+import com.balocco.androidnavigation.data.local.UserLocationLocalDataSource
 import com.balocco.androidnavigation.data.model.Location
+import com.balocco.androidnavigation.feature.map.domain.FetchVenuesUseCase
 import com.balocco.androidnavigation.feature.map.domain.LocationPermissionGrantedUseCase
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -27,7 +28,8 @@ class MapsViewModelTest {
 
     @Captor private lateinit var userLocationCaptor: ArgumentCaptor<UserLocationState>
     @Mock private lateinit var observer: Observer<UserLocationState>
-    @Mock private lateinit var userLocationDataSource: UserLocationDataSource
+    @Mock private lateinit var fetchVenuesUseCase: FetchVenuesUseCase
+    @Mock private lateinit var userLocationLocalDataSource: UserLocationLocalDataSource
     @Mock private lateinit var locationPermissionGrantedUseCase: LocationPermissionGrantedUseCase
 
     @Before
@@ -36,7 +38,8 @@ class MapsViewModelTest {
         viewModel =
             MapsViewModel(
                 TestSchedulerProvider(),
-                userLocationDataSource,
+                userLocationLocalDataSource,
+                fetchVenuesUseCase,
                 locationPermissionGrantedUseCase
             )
         viewModel.userLocationState().observeForever(observer)
@@ -58,7 +61,11 @@ class MapsViewModelTest {
     fun `When map ready permission granted and location available, notifies with location`() {
         val location = Location(90.0, 130.0)
         whenever(locationPermissionGrantedUseCase()).thenReturn(true)
-        whenever(userLocationDataSource.locationObservable()).thenReturn(Observable.just(location))
+        whenever(userLocationLocalDataSource.locationObservable()).thenReturn(
+            Observable.just(
+                location
+            )
+        )
 
         viewModel.onMapReady()
 
@@ -71,7 +78,11 @@ class MapsViewModelTest {
     @Test
     fun `When map ready permission granted and location null, notifies with null location`() {
         whenever(locationPermissionGrantedUseCase()).thenReturn(true)
-        whenever(userLocationDataSource.locationObservable()).thenReturn(Observable.error(Throwable()))
+        whenever(userLocationLocalDataSource.locationObservable()).thenReturn(
+            Observable.error(
+                Throwable()
+            )
+        )
 
         viewModel.onMapReady()
 
@@ -95,7 +106,11 @@ class MapsViewModelTest {
     fun `When location permission result with granted, fetches location and returns it`() {
         val location = Location(90.0, 130.0)
         whenever(locationPermissionGrantedUseCase()).thenReturn(true)
-        whenever(userLocationDataSource.locationObservable()).thenReturn(Observable.just(location))
+        whenever(userLocationLocalDataSource.locationObservable()).thenReturn(
+            Observable.just(
+                location
+            )
+        )
 
         viewModel.onLocationPermissionResult(true)
 
