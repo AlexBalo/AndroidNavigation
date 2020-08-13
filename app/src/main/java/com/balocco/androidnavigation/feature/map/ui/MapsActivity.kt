@@ -2,6 +2,7 @@ package com.balocco.androidnavigation.feature.map.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,25 +15,26 @@ import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
 import com.balocco.androidnavigation.feature.map.ui.map.GoogleMapWrapper
 import com.balocco.androidnavigation.feature.map.ui.map.MapAnimator
 import com.balocco.androidnavigation.feature.map.ui.map.MapInfoProvider
+import com.balocco.androidnavigation.feature.map.ui.map.MapVenuesDisplayer
 import com.balocco.androidnavigation.feature.map.viewmodel.MapsViewModel
+import com.balocco.androidnavigation.feature.map.viewmodel.NearbyVenuesState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import javax.inject.Inject
+
 
 private const val PERMISSION_REQUEST_ACCESS_LOCATION = 999
 
 class MapsActivity : BaseActivity(),
-    OnMapReadyCallback,
-    GoogleMap.OnCameraIdleListener,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
     @Inject lateinit var permissionsHelper: RequestPermissionsHelper
     @Inject lateinit var mapInfoProvider: MapInfoProvider
     @Inject lateinit var mapAnimator: MapAnimator
+    @Inject lateinit var mapVenuesDisplayer: MapVenuesDisplayer
 
     private lateinit var map: GoogleMap
     private lateinit var viewModel: MapsViewModel
@@ -42,12 +44,14 @@ class MapsActivity : BaseActivity(),
         setContentView(R.layout.activity_maps)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment.getMapAsync { googleMap -> handleGoogleMapReadyEvent(googleMap) }
 
         viewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MapsViewModel::class.java)
         viewModel.userLocationState()
             .observe(this, Observer { state -> handleUserLocationState(state) })
+        viewModel.nearbyVenuesState()
+            .observe(this, Observer { state -> handleNearbyVenuesState(state) })
     }
 
     override fun onInject(appComponent: AppComponent) {
@@ -66,20 +70,30 @@ class MapsActivity : BaseActivity(),
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+    private fun handleGoogleMapReadyEvent(googleMap: GoogleMap) {
         val mapInUse = GoogleMapWrapper(googleMap)
         mapAnimator.initWithMap(mapInUse)
         mapInfoProvider.initWithMap(mapInUse)
+        mapVenuesDisplayer.initWithMap(mapInUse)
         map = googleMap
-        map.setOnCameraIdleListener(this)
+        prepareGoogleMapListeners()
         viewModel.onMapReady()
     }
 
-    override fun onCameraIdle() {
-        viewModel.onMapCenterChanged(
-            mapInfoProvider.mapCenter(),
-            mapInfoProvider.mapVisibleRadiusInMeters()
-        )
+    private fun prepareGoogleMapListeners() {
+        map.setOnCameraIdleListener {
+            viewModel.onMapCenterChanged(
+                mapInfoProvider.mapCenter(),
+                mapInfoProvider.mapVisibleRadiusInMeters()
+            )
+        }
+        map.setOnMarkerClickListener { marker ->
+            marker.showInfoWindow()
+            true
+        }
+        map.setOnInfoWindowClickListener { marker ->
+            Log.e("MarkerInfoWindow", "MarkerInfoWindow clicked: ${marker.title}")
+        }
     }
 
     // We need to suppress the warning even though we will enable to user location
@@ -93,6 +107,17 @@ class MapsActivity : BaseActivity(),
                 mapAnimator.centerTo(userLocationState.userLocation)
             }
             State.LOCATION_UNAVAILABLE -> { /* At the moment we don't do anything */
+            }
+        }
+    }
+
+    private fun handleNearbyVenuesState(nearbyVenuesState: NearbyVenuesState) {
+        when (nearbyVenuesState.state) {
+            NearbyVenuesState.State.SUCCESS -> {
+                mapVenuesDisplayer.clearVenues()
+                mapVenuesDisplayer.showVenues(nearbyVenuesState.venues)
+            }
+            NearbyVenuesState.State.ERROR -> { /* For now we do not react to errors */
             }
         }
     }
