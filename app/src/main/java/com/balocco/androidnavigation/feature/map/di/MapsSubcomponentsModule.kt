@@ -1,10 +1,7 @@
 package com.balocco.androidnavigation.feature.map.di
 
 import com.balocco.androidnavigation.di.ActivityScope
-import com.balocco.androidnavigation.feature.map.ui.map.MapAnimator
-import com.balocco.androidnavigation.feature.map.ui.map.MapAnimatorImpl
-import com.balocco.androidnavigation.feature.map.ui.map.MapInfoProvider
-import com.balocco.androidnavigation.feature.map.ui.map.MapInfoProviderImpl
+import com.balocco.androidnavigation.feature.map.ui.map.*
 import dagger.Module
 import dagger.Provides
 
@@ -18,4 +15,8 @@ class MapsSubcomponentsModule {
     @Provides
     @ActivityScope
     fun provideMapAnimator(): MapAnimator = MapAnimatorImpl()
+
+    @Provides
+    @ActivityScope
+    fun provideMapVenuesDisplayer(): MapVenuesDisplayer = MapVenuesDisplayerImpl()
 }

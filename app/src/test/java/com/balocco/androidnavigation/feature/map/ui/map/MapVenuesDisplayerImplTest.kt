@@ -1,0 +1,41 @@
+package com.balocco.androidnavigation.feature.map.ui.map
+
+import com.balocco.androidnavigation.TestUtils
+import com.nhaarman.mockito_kotlin.verify
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+
+class MapVenuesDisplayerImplTest {
+
+    @Mock lateinit var map: Map
+
+    private lateinit var venuesDisplayer: MapVenuesDisplayer
+
+    @Before
+    fun setUp() {
+        MockitoAnnotations.initMocks(this)
+
+        venuesDisplayer = MapVenuesDisplayerImpl()
+        venuesDisplayer.initWithMap(map)
+    }
+
+    @Test
+    fun `When clear venues, clears venues from the map`() {
+        venuesDisplayer.clearVenues()
+
+        verify(map).clearVenues()
+    }
+
+    @Test
+    fun `When show venues, shows venues on the map`() {
+        val venue1 = TestUtils.createVenue("1")
+        val venue2 = TestUtils.createVenue("2")
+        val venues = listOf(venue1, venue2)
+
+        venuesDisplayer.showVenues(venues)
+
+        verify(map).showVenues(venues)
+    }
+}

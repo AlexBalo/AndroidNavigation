@@ -1,9 +1,11 @@
 package com.balocco.androidnavigation.feature.map.ui.map
 
 import com.balocco.androidnavigation.data.model.Location
+import com.balocco.androidnavigation.data.model.Venue
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.VisibleRegion
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -53,5 +55,21 @@ class GoogleMapWrapper(
         val currentLatLng = LatLng(location.latitude, location.longitude)
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, zoom))
     }
+
+    override fun clearVenues() {
+        googleMap.clear()
+    }
+
+    override fun showVenues(venues: List<Venue>) {
+        venues.forEach { venue ->
+            val marker = googleMap.addMarker(markerOptionFromVenue(venue))
+            marker.tag = venue
+        }
+    }
+
+    private fun markerOptionFromVenue(venue: Venue): MarkerOptions =
+        MarkerOptions()
+            .position(LatLng(venue.location.latitude, venue.location.longitude))
+            .title(venue.name)
 
 }
