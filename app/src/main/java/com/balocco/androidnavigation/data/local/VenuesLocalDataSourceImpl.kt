@@ -15,10 +15,9 @@ class VenuesLocalDataSourceImpl : VenuesLocalDataSource {
 
     override fun loadVenues(): HashMap<String, Venue> = venuesStorage
 
-    override fun storeVenues(venues: List<Venue>): Completable {
-        venues.forEach { venue -> venuesStorage[venue.id] = venue }
-        venuesStorageSubject.onNext(venuesStorage)
-        return Completable.complete()
-    }
-
+    override fun storeVenues(venues: List<Venue>): Completable =
+        Completable.fromCallable {
+            venues.forEach { venue -> venuesStorage[venue.id] = venue }
+            venuesStorageSubject.onNext(venuesStorage)
+        }
 }

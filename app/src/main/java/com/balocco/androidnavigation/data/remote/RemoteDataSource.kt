@@ -13,6 +13,7 @@ interface RemoteDataSource {
     fun fetchVenues(
         @Query("ll") center: String,
         @Query("radius") radius: Double,
+        @Query("categoryId") categoryId: String,
         @Query("limit") limit: Int = 20
     ): Single<VenuesResponseWrapper>
 

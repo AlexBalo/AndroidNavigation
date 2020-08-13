@@ -6,7 +6,7 @@ import com.balocco.androidnavigation.TestUtils
 import com.balocco.androidnavigation.common.scheduler.TestSchedulerProvider
 import com.balocco.androidnavigation.data.local.UserLocationLocalDataSource
 import com.balocco.androidnavigation.data.model.Location
-import com.balocco.androidnavigation.feature.map.domain.FetchVenuesUseCase
+import com.balocco.androidnavigation.feature.map.domain.FetchRestaurantsUseCase
 import com.balocco.androidnavigation.feature.map.domain.LocationPermissionGrantedUseCase
 import com.balocco.androidnavigation.feature.map.domain.NearbyVenuesProvider
 import com.nhaarman.mockito_kotlin.verify
@@ -33,7 +33,7 @@ class MapsViewModelTest {
     @Captor private lateinit var venuesCaptor: ArgumentCaptor<NearbyVenuesState>
     @Mock private lateinit var userLocationObserver: Observer<UserLocationState>
     @Mock private lateinit var venuesObserver: Observer<NearbyVenuesState>
-    @Mock private lateinit var fetchVenuesUseCase: FetchVenuesUseCase
+    @Mock private lateinit var fetchRestaurantsUseCase: FetchRestaurantsUseCase
     @Mock private lateinit var nearbyVenuesProvider: NearbyVenuesProvider
     @Mock private lateinit var userLocationLocalDataSource: UserLocationLocalDataSource
     @Mock private lateinit var locationPermissionGrantedUseCase: LocationPermissionGrantedUseCase
@@ -46,7 +46,7 @@ class MapsViewModelTest {
                 TestSchedulerProvider(),
                 userLocationLocalDataSource,
                 nearbyVenuesProvider,
-                fetchVenuesUseCase,
+                fetchRestaurantsUseCase,
                 locationPermissionGrantedUseCase
             )
         viewModel.userLocationState().observeForever(userLocationObserver)

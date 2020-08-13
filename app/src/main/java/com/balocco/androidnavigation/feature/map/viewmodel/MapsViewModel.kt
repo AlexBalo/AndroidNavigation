@@ -7,7 +7,7 @@ import com.balocco.androidnavigation.common.viewmodel.BaseViewModel
 import com.balocco.androidnavigation.data.local.UserLocationLocalDataSource
 import com.balocco.androidnavigation.data.model.Location
 import com.balocco.androidnavigation.data.model.Venue
-import com.balocco.androidnavigation.feature.map.domain.FetchVenuesUseCase
+import com.balocco.androidnavigation.feature.map.domain.FetchRestaurantsUseCase
 import com.balocco.androidnavigation.feature.map.domain.LocationPermissionGrantedUseCase
 import com.balocco.androidnavigation.feature.map.domain.NearbyVenuesProvider
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
@@ -18,7 +18,7 @@ class MapsViewModel @Inject constructor(
     private val schedulerProvider: SchedulerProvider,
     private val userLocationLocalDataSource: UserLocationLocalDataSource,
     private val nearbyVenuesProvider: NearbyVenuesProvider,
-    private val fetchVenuesUseCase: FetchVenuesUseCase,
+    private val fetchRestaurantsUseCase: FetchRestaurantsUseCase,
     private val locationPermissionGrantedUseCase: LocationPermissionGrantedUseCase
 ) : BaseViewModel() {
 
@@ -50,11 +50,11 @@ class MapsViewModel @Inject constructor(
 
     fun onMapCenterChanged(newCenter: Location, mapRadius: Double) {
         nearbyVenuesProvider.updateProximityInfo(newCenter, mapRadius)
-        fetchVenues(newCenter.literal(), mapRadius)
+        fetchRestaurants(newCenter.literal(), mapRadius)
     }
 
-    private fun fetchVenues(center: String, radius: Double) {
-        fetchVenuesUseCase(center, radius)
+    private fun fetchRestaurants(center: String, radius: Double) {
+        fetchRestaurantsUseCase(center, radius)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .subscribe()
