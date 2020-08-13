@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.ui.map
+package com.balocco.androidnavigation.map
 
 import com.balocco.androidnavigation.data.model.Location
 import com.nhaarman.mockito_kotlin.verify
@@ -20,6 +20,13 @@ class MapInfoProviderImplTest {
 
         infoProvider = MapInfoProviderImpl()
         infoProvider.initWithMap(map)
+    }
+
+    @Test
+    fun `When set user location enabled, sets user location enabled on the map`() {
+        infoProvider.setUserLocationEnabled(true)
+
+        verify(map).setUserLocationEnabled(true)
     }
 
     @Test

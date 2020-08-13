@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.ui.map
+package com.balocco.androidnavigation.map
 
 import com.balocco.androidnavigation.data.model.Location
 import com.nhaarman.mockito_kotlin.any

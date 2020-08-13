@@ -1,6 +1,5 @@
-package com.balocco.androidnavigation.feature.map.ui.map
+package com.balocco.androidnavigation.map
 
-import com.balocco.androidnavigation.data.model.Venue
 import javax.inject.Inject
 
 class MapVenuesDisplayerImpl @Inject constructor() : MapVenuesDisplayer {
@@ -15,8 +14,8 @@ class MapVenuesDisplayerImpl @Inject constructor() : MapVenuesDisplayer {
         map.clearVenues()
     }
 
-    override fun showVenues(venues: List<Venue>) {
-        map.showVenues(venues)
+    override fun showMarkers(markers: List<Marker>) {
+        map.showMarkers(markers)
     }
 
 }
