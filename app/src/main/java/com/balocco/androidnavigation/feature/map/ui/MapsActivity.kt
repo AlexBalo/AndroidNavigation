@@ -8,10 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.balocco.androidcomponents.di.AppComponent
 import com.balocco.androidnavigation.R
+import com.balocco.androidnavigation.common.navigation.Navigator
 import com.balocco.androidnavigation.common.permission.Permission
 import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
 import com.balocco.androidnavigation.common.ui.BaseActivity
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
+import com.balocco.androidnavigation.feature.detail.ui.DetailFragment
 import com.balocco.androidnavigation.feature.map.ui.map.GoogleMapWrapper
 import com.balocco.androidnavigation.feature.map.ui.map.MapAnimator
 import com.balocco.androidnavigation.feature.map.ui.map.MapInfoProvider
@@ -34,6 +36,7 @@ class MapsActivity : BaseActivity(),
     @Inject lateinit var mapInfoProvider: MapInfoProvider
     @Inject lateinit var mapAnimator: MapAnimator
     @Inject lateinit var mapVenuesDisplayer: MapVenuesDisplayer
+    @Inject lateinit var navigator: Navigator
 
     private lateinit var map: GoogleMap
     private lateinit var viewModel: MapsViewModel
@@ -92,6 +95,8 @@ class MapsActivity : BaseActivity(),
         }
         map.setOnInfoWindowClickListener { marker ->
             Log.e("MarkerInfoWindow", "MarkerInfoWindow clicked: ${marker.title}")
+            val detailFragment = DetailFragment()
+            navigator.navigate(detailFragment)
         }
     }
 
