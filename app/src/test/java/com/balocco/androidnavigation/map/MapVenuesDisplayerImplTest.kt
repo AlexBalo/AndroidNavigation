@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.ui.map
+package com.balocco.androidnavigation.map
 
 import com.balocco.androidnavigation.TestUtils
 import com.nhaarman.mockito_kotlin.verify
@@ -29,13 +29,13 @@ class MapVenuesDisplayerImplTest {
     }
 
     @Test
-    fun `When show venues, shows venues on the map`() {
+    fun `When show markers, shows markers on the map`() {
         val venue1 = TestUtils.createVenue("1")
-        val venue2 = TestUtils.createVenue("2")
-        val venues = listOf(venue1, venue2)
+        val marker = VenueMarker(venue1)
+        val markers = listOf(marker)
 
-        venuesDisplayer.showVenues(venues)
+        venuesDisplayer.showMarkers(markers)
 
-        verify(map).showVenues(venues)
+        verify(map).showMarkers(markers)
     }
 }

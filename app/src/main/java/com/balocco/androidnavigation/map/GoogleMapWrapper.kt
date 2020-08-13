@@ -1,7 +1,7 @@
-package com.balocco.androidnavigation.feature.map.ui.map
+package com.balocco.androidnavigation.map
 
+import android.annotation.SuppressLint
 import com.balocco.androidnavigation.data.model.Location
-import com.balocco.androidnavigation.data.model.Venue
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -13,6 +13,30 @@ import kotlin.math.sqrt
 class GoogleMapWrapper(
     private val googleMap: GoogleMap
 ) : Map {
+
+    // We need to suppress the warning even though we will enable to user location
+    // only after verifying location permission was granted
+    @SuppressLint("MissingPermission")
+    override fun setUserLocationEnabled(enabled: Boolean) {
+        googleMap.isMyLocationEnabled = true
+    }
+
+    override fun setMapIdleListener(listener: MapIdleListener) {
+        googleMap.setOnCameraIdleListener { listener.onMapIdle() }
+    }
+
+    override fun setMapMarkerClickedListener(listener: MapMarkerClickedListener) {
+        googleMap.setOnMarkerClickListener { marker ->
+            listener.onMapMarkerClicked(GoogleMapMarker(marker))
+            true
+        }
+    }
+
+    override fun setMapInfoBubbleClickListener(listener: MapInfoBubbleClickListener) {
+        googleMap.setOnInfoWindowClickListener { marker ->
+            listener.onInfoBubbleClicked(GoogleMapMarker(marker))
+        }
+    }
 
     override fun center(): Location {
         val center = googleMap.cameraPosition.target
@@ -60,16 +84,16 @@ class GoogleMapWrapper(
         googleMap.clear()
     }
 
-    override fun showVenues(venues: List<Venue>) {
-        venues.forEach { venue ->
-            val marker = googleMap.addMarker(markerOptionFromVenue(venue))
-            marker.tag = venue
+    override fun showMarkers(markers: List<Marker>) {
+        markers.forEach { marker ->
+            val googleMarker = googleMap.addMarker(markerOptionFromMarker(marker))
+            googleMarker.tag = marker.tag()
         }
     }
 
-    private fun markerOptionFromVenue(venue: Venue): MarkerOptions =
+    private fun markerOptionFromMarker(marker: Marker): MarkerOptions =
         MarkerOptions()
-            .position(LatLng(venue.location.latitude, venue.location.longitude))
-            .title(venue.name)
+            .position(LatLng(marker.location().latitude, marker.location().longitude))
+            .title(marker.title())
 
 }
