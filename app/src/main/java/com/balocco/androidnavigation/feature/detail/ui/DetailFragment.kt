@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.balocco.androidnavigation.R
-import com.balocco.androidnavigation.common.ui.BaseFragment
 
 private const val TAG = "DetailFragment"
 
-class DetailFragment() : BaseFragment() {
+class DetailFragment() : Fragment() {
 
-    override fun getFragmentTag(): String = TAG
+//    override fun getFragmentTag(): String = TAG
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,4 +20,8 @@ class DetailFragment() : BaseFragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
+
+//    override fun onInject(activity: MapsActivity) {
+//
+//    }
 }

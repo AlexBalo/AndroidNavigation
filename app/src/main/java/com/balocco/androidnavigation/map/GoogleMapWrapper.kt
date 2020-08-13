@@ -7,12 +7,26 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.VisibleRegion
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.Subject
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 class GoogleMapWrapper(
     private val googleMap: GoogleMap
 ) : Map {
+
+    private val mapIdleObservable: Subject<Unit> = PublishSubject.create()
+    private val mapMarkerClickedObservable: Subject<Marker> = PublishSubject.create()
+    private val mapMarkerInfoBubbleClickedObservable: Subject<Marker> = PublishSubject.create()
+
+    override fun mapIdleObservable(): Observable<Unit> = mapIdleObservable
+
+    override fun mapMarkerClickedObservable(): Observable<Marker> = mapMarkerClickedObservable
+
+    override fun mapMarkerInfoBubbleClickedObservable(): Observable<Marker> =
+        mapMarkerInfoBubbleClickedObservable
 
     // We need to suppress the warning even though we will enable to user location
     // only after verifying location permission was granted
@@ -21,20 +35,20 @@ class GoogleMapWrapper(
         googleMap.isMyLocationEnabled = true
     }
 
-    override fun setMapIdleListener(listener: MapIdleListener) {
-        googleMap.setOnCameraIdleListener { listener.onMapIdle() }
+    override fun setMapIdleListener() {
+        googleMap.setOnCameraIdleListener { mapIdleObservable.onNext(Unit) }
     }
 
-    override fun setMapMarkerClickedListener(listener: MapMarkerClickedListener) {
+    override fun setMapMarkerClickedListener() {
         googleMap.setOnMarkerClickListener { marker ->
-            listener.onMapMarkerClicked(GoogleMapMarker(marker))
+            mapMarkerClickedObservable.onNext(GoogleMapMarker(marker))
             true
         }
     }
 
-    override fun setMapInfoBubbleClickListener(listener: MapInfoBubbleClickListener) {
+    override fun setMapInfoBubbleClickListener() {
         googleMap.setOnInfoWindowClickListener { marker ->
-            listener.onInfoBubbleClicked(GoogleMapMarker(marker))
+            mapMarkerClickedObservable.onNext(GoogleMapMarker(marker))
         }
     }
 

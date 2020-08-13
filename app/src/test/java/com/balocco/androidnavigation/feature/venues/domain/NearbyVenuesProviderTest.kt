@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.domain
+package com.balocco.androidnavigation.feature.venues.domain
 
 import com.balocco.androidnavigation.TestUtils
 import com.balocco.androidnavigation.data.local.VenuesLocalDataSource
@@ -26,10 +26,11 @@ class NearbyVenuesProviderTest {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        nearbyVenuesProvider = NearbyVenuesProvider(
-            venuesLocalDataSource,
-            venueWithinRadiusUseCase
-        )
+        nearbyVenuesProvider =
+            NearbyVenuesProvider(
+                venuesLocalDataSource,
+                venueWithinRadiusUseCase
+            )
     }
 
     @Test fun `When venues from local storage available, returns only venues in range`() {
@@ -41,11 +42,26 @@ class NearbyVenuesProviderTest {
         whenever(venuesLocalDataSource.venuesStorageObservable())
             .thenReturn(Observable.just(HashMap()))
         whenever(venuesLocalDataSource.loadVenues()).thenReturn(mapAlreadyInStorage)
-        whenever(venueWithinRadiusUseCase(venue1, CENTER, RADIUS)).thenReturn(true)
-        whenever(venueWithinRadiusUseCase(venue2, CENTER, RADIUS)).thenReturn(false)
+        whenever(
+            venueWithinRadiusUseCase(
+                venue1,
+                CENTER,
+                RADIUS
+            )
+        ).thenReturn(true)
+        whenever(
+            venueWithinRadiusUseCase(
+                venue2,
+                CENTER,
+                RADIUS
+            )
+        ).thenReturn(false)
         val testObserver = nearbyVenuesProvider.venuesObservable().test()
 
-        nearbyVenuesProvider.updateProximityInfo(CENTER, RADIUS)
+        nearbyVenuesProvider.updateProximityInfo(
+            CENTER,
+            RADIUS
+        )
 
         testObserver.assertValues(
             listOf(),
@@ -66,7 +82,10 @@ class NearbyVenuesProviderTest {
         whenever(venueWithinRadiusUseCase(eq(venue2), any(), any())).thenReturn(true)
         val testObserver = nearbyVenuesProvider.venuesObservable().test()
 
-        nearbyVenuesProvider.updateProximityInfo(CENTER, RADIUS)
+        nearbyVenuesProvider.updateProximityInfo(
+            CENTER,
+            RADIUS
+        )
 
         testObserver.assertValues(
             listOf(venue1, venue2),

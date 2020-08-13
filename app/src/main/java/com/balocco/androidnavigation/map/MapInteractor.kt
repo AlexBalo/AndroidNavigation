@@ -1,14 +1,22 @@
 package com.balocco.androidnavigation.map
 
+import io.reactivex.rxjava3.core.Observable
+
 interface MapInteractor {
 
     fun initWithMap(map: Map)
 
-    fun setMapIdleListener(listener: MapIdleListener)
+    fun mapIdleObservable(): Observable<Unit>
 
-    fun setMapMarkerClickedListener(listener: MapMarkerClickedListener)
+    fun mapMarkerClickedObservable(): Observable<Marker>
 
-    fun setMapInfoBubbleClickListener(listener: MapInfoBubbleClickListener)
+    fun mapMarkerInfoBubbleClickedObservable(): Observable<Marker>
+
+    fun setMapIdleListener()
+
+    fun setMapMarkerClickedListener()
+
+    fun setMapInfoBubbleClickListener()
 
 
 }

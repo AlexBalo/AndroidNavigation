@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.domain
+package com.balocco.androidnavigation.feature.venues.domain
 
 import com.balocco.androidnavigation.data.local.VenuesLocalDataSource
 import com.balocco.androidnavigation.data.model.Location

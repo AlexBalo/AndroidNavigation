@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.domain
+package com.balocco.androidnavigation.feature.venues.domain
 
 import com.balocco.androidnavigation.data.local.VenuesLocalDataSource
 import com.balocco.androidnavigation.data.remote.RemoteDataSource
@@ -13,7 +13,10 @@ class FetchRestaurantsUseCase @Inject constructor(
 ) {
 
     operator fun invoke(center: String, radius: Double): Completable =
-        remoteDataSource.fetchVenues(center, radius, FOOD_CATEGORY_ID)
+        remoteDataSource.fetchVenues(
+            center, radius,
+            FOOD_CATEGORY_ID
+        )
             .onErrorComplete()
             .flatMapCompletable { venuesWrapper ->
                 localDataSource.storeVenues(venuesWrapper.response.venues)

@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.domain
+package com.balocco.androidnavigation.feature.venues.domain
 
 import com.balocco.androidnavigation.TestUtils
 import com.balocco.androidnavigation.data.local.VenuesLocalDataSource
@@ -31,7 +31,11 @@ class FetchRestaurantsUseCaseTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        useCase = FetchRestaurantsUseCase(remoteDataSource, localDataSource)
+        useCase =
+            FetchRestaurantsUseCase(
+                remoteDataSource,
+                localDataSource
+            )
     }
 
     @Test
@@ -39,21 +43,39 @@ class FetchRestaurantsUseCaseTest {
         val venues = listOf(TestUtils.createVenue())
         val venuesResponse = VenuesResponse(venues)
         val venuesResponseWrapper = VenuesResponseWrapper(venuesResponse)
-        whenever(remoteDataSource.fetchVenues(CENTER, RADIUS, FOOD_CATEGORY_ID))
+        whenever(
+            remoteDataSource.fetchVenues(
+                CENTER,
+                RADIUS,
+                FOOD_CATEGORY_ID
+            )
+        )
             .thenReturn(Single.just(venuesResponseWrapper))
         whenever(localDataSource.storeVenues(venues)).thenReturn(Completable.complete())
 
-        useCase(CENTER, RADIUS).test().assertComplete()
+        useCase(
+            CENTER,
+            RADIUS
+        ).test().assertComplete()
 
         verify(localDataSource).storeVenues(venues)
     }
 
     @Test
     fun `When fetching restaurants with error, notify complete and does not store venues`() {
-        whenever(remoteDataSource.fetchVenues(CENTER, RADIUS, FOOD_CATEGORY_ID))
+        whenever(
+            remoteDataSource.fetchVenues(
+                CENTER,
+                RADIUS,
+                FOOD_CATEGORY_ID
+            )
+        )
             .thenReturn(Single.error(Throwable()))
 
-        useCase(CENTER, RADIUS).test().assertComplete()
+        useCase(
+            CENTER,
+            RADIUS
+        ).test().assertComplete()
 
         verify(localDataSource, never()).storeVenues(any())
     }
