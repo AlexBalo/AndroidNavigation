@@ -1,16 +1,23 @@
 package com.balocco.androidnavigation.map
 
 import com.balocco.androidnavigation.data.model.Location
+import io.reactivex.rxjava3.core.Observable
 
 interface Map {
 
+    fun mapIdleObservable(): Observable<Unit>
+
+    fun mapMarkerClickedObservable(): Observable<Marker>
+
+    fun mapMarkerInfoBubbleClickedObservable(): Observable<Marker>
+
     fun setUserLocationEnabled(enabled: Boolean)
 
-    fun setMapIdleListener(listener: MapIdleListener)
+    fun setMapIdleListener()
 
-    fun setMapMarkerClickedListener(listener: MapMarkerClickedListener)
+    fun setMapMarkerClickedListener()
 
-    fun setMapInfoBubbleClickListener(listener: MapInfoBubbleClickListener)
+    fun setMapInfoBubbleClickListener()
 
     fun center(): Location
 

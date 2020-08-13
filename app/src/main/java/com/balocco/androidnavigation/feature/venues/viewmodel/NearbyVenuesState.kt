@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.map.viewmodel
+package com.balocco.androidnavigation.feature.venues.viewmodel
 
 import com.balocco.androidnavigation.data.model.Venue
 

@@ -5,10 +5,14 @@ import androidx.fragment.app.FragmentActivity
 import com.balocco.androidnavigation.common.navigation.MainNavigator
 import com.balocco.androidnavigation.common.navigation.Navigator
 import com.balocco.androidnavigation.di.ActivityScope
+import com.balocco.androidnavigation.feature.venues.di.VenuesComponent
 import dagger.Module
 import dagger.Provides
 
-@Module
+@Module(
+    subcomponents = [
+        VenuesComponent::class]
+)
 class MapsSubcomponentsModule {
 
     @Provides

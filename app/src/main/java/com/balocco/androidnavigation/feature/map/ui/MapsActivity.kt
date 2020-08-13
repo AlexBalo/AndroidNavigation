@@ -7,15 +7,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.balocco.androidcomponents.di.AppComponent
 import com.balocco.androidnavigation.R
 import com.balocco.androidnavigation.common.navigation.Navigator
+import com.balocco.androidnavigation.common.navigation.NoNavigationTransition
 import com.balocco.androidnavigation.common.permission.Permission
 import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
 import com.balocco.androidnavigation.common.ui.BaseActivity
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
-import com.balocco.androidnavigation.feature.detail.ui.DetailFragment
+import com.balocco.androidnavigation.feature.map.di.MapsComponent
 import com.balocco.androidnavigation.feature.map.viewmodel.MapsViewModel
-import com.balocco.androidnavigation.feature.map.viewmodel.NearbyVenuesState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
+import com.balocco.androidnavigation.feature.venues.ui.VenuesFragment
 import com.balocco.androidnavigation.map.*
 import com.balocco.androidnavigation.map.Map
 import com.google.android.gms.maps.SupportMapFragment
@@ -33,10 +34,10 @@ class MapsActivity : BaseActivity(),
     @Inject lateinit var mapVenuesDisplayer: MapVenuesDisplayer
     @Inject lateinit var mapInteractor: MapInteractor
     @Inject lateinit var userLocationLayer: UserLocationLayer
-    @Inject lateinit var venuesLayer: VenuesLayer
     @Inject lateinit var navigator: Navigator
 
     private lateinit var viewModel: MapsViewModel
+    lateinit var component: MapsComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +50,11 @@ class MapsActivity : BaseActivity(),
             ViewModelProvider(viewModelStore, viewModelFactory).get(MapsViewModel::class.java)
         viewModel.userLocationState()
             .observe(this, Observer { state -> handleUserLocationState(state) })
-        viewModel.nearbyVenuesState()
-            .observe(this, Observer { state -> handleNearbyVenuesState(state) })
     }
 
     override fun onInject(appComponent: AppComponent) {
-        appComponent.mapsComponent().create(this).inject(this)
+        component = appComponent.mapsComponent().create(this)
+        component.inject(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -74,30 +74,15 @@ class MapsActivity : BaseActivity(),
         mapInfoProvider.initWithMap(map)
         mapVenuesDisplayer.initWithMap(map)
         mapInteractor.initWithMap(map)
-        prepareMapListeners()
+        mapInteractor.setMapIdleListener()
+        mapInteractor.setMapMarkerClickedListener()
+        mapInteractor.setMapInfoBubbleClickListener()
         viewModel.onMapReady()
-    }
-
-    private fun prepareMapListeners() {
-        mapInteractor.setMapIdleListener(object : MapIdleListener {
-            override fun onMapIdle() {
-                viewModel.onMapCenterChanged(
-                    mapInfoProvider.mapCenter(),
-                    mapInfoProvider.mapVisibleRadiusInMeters()
-                )
-            }
-        })
-        mapInteractor.setMapMarkerClickedListener(object : MapMarkerClickedListener {
-            override fun onMapMarkerClicked(marker: Marker) {
-                venuesLayer.markerClicked(marker)
-            }
-        })
-        mapInteractor.setMapInfoBubbleClickListener(object : MapInfoBubbleClickListener {
-            override fun onInfoBubbleClicked(marker: Marker) {
-                val detailFragment = DetailFragment()
-                navigator.navigate(detailFragment)
-            }
-        })
+        navigator.navigate(
+            fragment = VenuesFragment.newInstance(),
+            navigationTransition = NoNavigationTransition(),
+            addToBackStack = false
+        )
     }
 
     private fun handleUserLocationState(userLocationState: UserLocationState) {
@@ -108,17 +93,6 @@ class MapsActivity : BaseActivity(),
             }
             State.LOCATION_UNAVAILABLE -> {
                 userLocationLayer.locationUnavailable()
-            }
-        }
-    }
-
-    private fun handleNearbyVenuesState(nearbyVenuesState: NearbyVenuesState) {
-        when (nearbyVenuesState.state) {
-            NearbyVenuesState.State.SUCCESS -> {
-                venuesLayer.newVenuesAvailable(nearbyVenuesState.venues)
-            }
-            NearbyVenuesState.State.ERROR -> {
-                venuesLayer.errorLoadingVenues()
             }
         }
     }
