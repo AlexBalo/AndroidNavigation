@@ -50,10 +50,10 @@ class MapsViewModel @Inject constructor(
 
     fun onMapCenterChanged(newCenter: Location, mapRadius: Double) {
         nearbyVenuesProvider.updateProximityInfo(newCenter, mapRadius)
-        fetchVenues(newCenter.literal(), mapRadius)
+        fetchRestaurants(newCenter.literal(), mapRadius)
     }
 
-    private fun fetchVenues(center: String, radius: Double) {
+    private fun fetchRestaurants(center: String, radius: Double) {
         fetchRestaurantsUseCase(center, radius)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
