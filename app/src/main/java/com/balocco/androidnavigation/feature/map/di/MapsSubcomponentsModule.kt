@@ -1,7 +1,10 @@
 package com.balocco.androidnavigation.feature.map.di
 
+import android.app.Activity
+import androidx.fragment.app.FragmentActivity
+import com.balocco.androidnavigation.common.navigation.MainNavigator
+import com.balocco.androidnavigation.common.navigation.Navigator
 import com.balocco.androidnavigation.di.ActivityScope
-import com.balocco.androidnavigation.feature.map.ui.map.*
 import dagger.Module
 import dagger.Provides
 
@@ -10,13 +13,9 @@ class MapsSubcomponentsModule {
 
     @Provides
     @ActivityScope
-    fun provideMapInfoProvider(): MapInfoProvider = MapInfoProviderImpl()
+    fun provideFragmentActivity(activity: Activity): FragmentActivity = activity as FragmentActivity
 
     @Provides
     @ActivityScope
-    fun provideMapAnimator(): MapAnimator = MapAnimatorImpl()
-
-    @Provides
-    @ActivityScope
-    fun provideMapVenuesDisplayer(): MapVenuesDisplayer = MapVenuesDisplayerImpl()
+    fun provideNavigator(activity: FragmentActivity): Navigator = MainNavigator(activity)
 }
