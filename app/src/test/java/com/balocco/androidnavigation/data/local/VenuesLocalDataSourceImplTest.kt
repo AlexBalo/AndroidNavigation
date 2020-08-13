@@ -20,7 +20,7 @@ class VenuesLocalDataSourceImplTest {
         val venues = listOf(venue1, venue2)
         val testObserver = venuesLocalDataSource.venuesStorageObservable().test()
 
-        venuesLocalDataSource.storeVenues(venues)
+        venuesLocalDataSource.storeVenues(venues).test()
 
         val expectedMap = HashMap<String, Venue>()
         expectedMap["1"] = venue1
@@ -33,7 +33,7 @@ class VenuesLocalDataSourceImplTest {
         val venue2 = TestUtils.createVenue("2")
         val venues = listOf(venue1, venue2)
 
-        venuesLocalDataSource.storeVenues(venues)
+        venuesLocalDataSource.storeVenues(venues).test()
 
         val expectedMap = HashMap<String, Venue>()
         expectedMap["1"] = venue1
