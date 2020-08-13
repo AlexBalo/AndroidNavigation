@@ -24,7 +24,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import javax.inject.Inject
 
-
 private const val PERMISSION_REQUEST_ACCESS_LOCATION = 999
 
 class MapsActivity : BaseActivity(),
