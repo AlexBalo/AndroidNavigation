@@ -104,11 +104,11 @@ class MapsActivity : BaseActivity(),
 
     private fun handMapOverlayState(state: MapLayerOverlayState) {
         when (state.layer) {
-            MapLayerOverlayState.Layer.VENUES -> showVenues()
+            MapLayerOverlayState.Layer.VENUES -> addVenuesLayer()
         }
     }
 
-    private fun showVenues() {
+    private fun addVenuesLayer() {
         navigator.navigate(
             fragment = VenuesFragment.newInstance(),
             navigationTransition = NoNavigationTransition(),
