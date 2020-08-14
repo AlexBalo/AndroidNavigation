@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.venues.domain
+package com.balocco.androidnavigation.feature.detail.domain
 
 import com.balocco.androidnavigation.data.model.Venue
 import com.balocco.androidnavigation.feature.detail.viewmodel.VenueDetail
@@ -29,6 +29,9 @@ class VenueDetailMapper @Inject constructor() {
             categoriesBuilder.append(venueCategory.name)
         }
         venueDetailNew.categories = categoriesBuilder.toString()
+        venueDetailNew.rating = venue.rating?.toString() ?: ""
+        venueDetailNew.description = venue.description ?: ""
+        venueDetailNew.website = venue.url ?: ""
         return venueDetailNew
     }
 }

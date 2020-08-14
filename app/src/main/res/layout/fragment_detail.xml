@@ -82,18 +82,80 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/topDetailContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/one_unit_dp">
+
+                <TextView
+                    android:id="@+id/addressTitle"
+                    style="@style/DetailTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/one_unit_dp"
+                    android:layout_toStartOf="@id/ratingContainer"
+                    android:text="@string/detail_address" />
+
+                <TextView
+                    android:id="@+id/address"
+                    style="@style/DetailDescriptionTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addressTitle"
+                    android:layout_toStartOf="@id/ratingContainer" />
+
+                <LinearLayout
+                    android:id="@+id/ratingContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/two_unit_dp"
+                    android:layout_marginRight="@dimen/two_unit_dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_default"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/three_unit_sp"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/one_unit_dp"
+                        android:paddingEnd="@dimen/one_unit_dp"
+                        android:src="@drawable/ic_baseline_star_24"
+                        android:tint="@color/textPrimary"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="@dimen/one_unit_dp"
+                android:layout_marginBottom="@dimen/one_unit_dp"
+                android:background="@color/gradientDark" />
+
             <TextView
                 style="@style/DetailTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/one_unit_dp"
-                android:text="@string/detail_address" />
+                android:text="@string/detail_description" />
 
             <TextView
-                android:id="@+id/address"
+                android:id="@+id/description"
                 style="@style/DetailDescriptionTextStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/detail_default" />
 
             <View
                 android:layout_width="match_parent"
@@ -114,7 +176,30 @@
                 style="@style/DetailDescriptionTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_categories_default" />
+                android:text="@string/detail_default" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="@dimen/one_unit_dp"
+                android:layout_marginBottom="@dimen/one_unit_dp"
+                android:background="@color/gradientDark" />
+
+            <TextView
+                style="@style/DetailTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/one_unit_dp"
+                android:text="@string/detail_website" />
+
+            <TextView
+                android:id="@+id/website"
+                style="@style/DetailDescriptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="@string/detail_default"
+                android:textColorLink="@color/colorPrimary" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -6,6 +6,8 @@
     <string name="dialog_confirm">CONFIRM</string>
 
     <string name="detail_address">Address</string>
+    <string name="detail_description">Description</string>
     <string name="detail_categories">Categories</string>
-    <string name="detail_categories_default">-</string>
+    <string name="detail_website">Website</string>
+    <string name="detail_default">-</string>
 </resources>

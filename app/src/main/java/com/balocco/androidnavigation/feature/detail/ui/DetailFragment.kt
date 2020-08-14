@@ -29,6 +29,9 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var addressText: TextView
     private lateinit var categoriesText: TextView
+    private lateinit var ratingText: TextView
+    private lateinit var descriptionText: TextView
+    private lateinit var websiteText: TextView
 
     private lateinit var viewModel: DetailViewModel
 
@@ -44,6 +47,9 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
         collapsingToolbar = root.findViewById(R.id.collapsing_toolbar)
         addressText = root.findViewById(R.id.address)
         categoriesText = root.findViewById(R.id.categories)
+        ratingText = root.findViewById(R.id.rating)
+        descriptionText = root.findViewById(R.id.description)
+        websiteText = root.findViewById(R.id.website)
 
         (activity as AppCompatActivity).setSupportActionBar(root.findViewById(R.id.toolbar))
         val actionBar = (activity as AppCompatActivity).supportActionBar
@@ -78,7 +84,14 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
         venueDetail?.let { detail ->
             collapsingToolbar.title = detail.name
             addressText.text = detail.address
-            categoriesText.text = detail.categories
+            categoriesText.text =
+                if (detail.categories.isEmpty()) getString(R.string.detail_default) else detail.categories
+            ratingText.text =
+                if (detail.rating.isEmpty()) getString(R.string.detail_default) else detail.rating
+            descriptionText.text =
+                if (detail.description.isEmpty()) getString(R.string.detail_default) else detail.description
+            websiteText.text =
+                if (detail.website.isEmpty()) getString(R.string.detail_default) else detail.website
         }
     }
 
