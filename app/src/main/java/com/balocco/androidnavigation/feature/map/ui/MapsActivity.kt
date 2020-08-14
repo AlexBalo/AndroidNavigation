@@ -13,6 +13,7 @@ import com.balocco.androidnavigation.common.permission.RequestPermissionsHelper
 import com.balocco.androidnavigation.common.ui.BaseActivity
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
 import com.balocco.androidnavigation.feature.map.di.MapsComponent
+import com.balocco.androidnavigation.feature.map.viewmodel.MapLayerOverlayState
 import com.balocco.androidnavigation.feature.map.viewmodel.MapsViewModel
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState
 import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.State
@@ -57,6 +58,8 @@ class MapsActivity : BaseActivity(),
             ViewModelProvider(viewModelStore, viewModelFactory).get(MapsViewModel::class.java)
         viewModel.userLocationState()
             .observe(this, Observer { state -> handleUserLocationState(state) })
+        viewModel.mapLayerOverlayState()
+            .observe(this, Observer { layer -> handMapOverlayState(layer) })
     }
 
     override fun onInject(appComponent: AppComponent) {
@@ -85,11 +88,6 @@ class MapsActivity : BaseActivity(),
         mapInteractor.setMapMarkerClickedListener()
         mapInteractor.setMapInfoBubbleClickListener()
         viewModel.onMapReady()
-        navigator.navigate(
-            fragment = VenuesFragment.newInstance(),
-            navigationTransition = NoNavigationTransition(),
-            addToBackStack = false
-        )
     }
 
     private fun handleUserLocationState(userLocationState: UserLocationState) {
@@ -102,6 +100,20 @@ class MapsActivity : BaseActivity(),
                 userLocationLayer.locationUnavailable()
             }
         }
+    }
+
+    private fun handMapOverlayState(state: MapLayerOverlayState) {
+        when (state.layer) {
+            MapLayerOverlayState.Layer.VENUES -> showVenues()
+        }
+    }
+
+    private fun showVenues() {
+        navigator.navigate(
+            fragment = VenuesFragment.newInstance(),
+            navigationTransition = NoNavigationTransition(),
+            addToBackStack = false
+        )
     }
 
     private fun requestLocationPermission() {

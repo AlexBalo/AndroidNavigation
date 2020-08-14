@@ -18,8 +18,10 @@ class MapsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private var userLocationState: MutableLiveData<UserLocationState> = MutableLiveData()
+    private var mapLayerOverlayState: MutableLiveData<MapLayerOverlayState> = MutableLiveData()
 
     fun userLocationState(): LiveData<UserLocationState> = userLocationState
+    fun mapLayerOverlayState(): LiveData<MapLayerOverlayState> = mapLayerOverlayState
 
     fun onMapReady() {
         handleUserLocation()
@@ -29,6 +31,7 @@ class MapsViewModel @Inject constructor(
         if (locationPermissionGranted) {
             handleUserLocation()
         } else {
+            notifyMapLayerOverlayState()
             notifyUserLocationState(State.LOCATION_UNAVAILABLE)
         }
     }
@@ -39,8 +42,14 @@ class MapsViewModel @Inject constructor(
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe(
-                    { location -> notifyUserLocationState(State.LOCATION_AVAILABLE, location) },
-                    { notifyUserLocationState(State.LOCATION_AVAILABLE) }
+                    { location ->
+                        notifyUserLocationState(State.LOCATION_AVAILABLE, location)
+                        notifyMapLayerOverlayState()
+                    },
+                    {
+                        notifyUserLocationState(State.LOCATION_AVAILABLE)
+                        notifyMapLayerOverlayState()
+                    }
                 ).addTo(compositeDisposable)
         } else {
             notifyUserLocationState(State.PERMISSION_REQUIRED)
@@ -49,5 +58,9 @@ class MapsViewModel @Inject constructor(
 
     private fun notifyUserLocationState(state: State, location: Location? = null) {
         userLocationState.value = UserLocationState(state, location)
+    }
+
+    private fun notifyMapLayerOverlayState() {
+        mapLayerOverlayState.value = MapLayerOverlayState(MapLayerOverlayState.Layer.VENUES)
     }
 }
