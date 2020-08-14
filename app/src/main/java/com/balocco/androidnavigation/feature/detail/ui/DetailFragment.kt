@@ -2,16 +2,20 @@ package com.balocco.androidnavigation.feature.detail.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.balocco.androidnavigation.R
+import com.balocco.androidnavigation.common.navigation.Navigator
 import com.balocco.androidnavigation.common.ui.InjectableFragment
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
+import com.balocco.androidnavigation.data.remote.ImageLoader
 import com.balocco.androidnavigation.feature.detail.viewmodel.DetailState
 import com.balocco.androidnavigation.feature.detail.viewmodel.DetailViewModel
 import com.balocco.androidnavigation.feature.detail.viewmodel.VenueDetail
@@ -25,7 +29,10 @@ private const val VENUE_ID_KEY = "VENUE_ID_KEY"
 class DetailFragment() : InjectableFragment<MapsActivity>() {
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var imageLoader: ImageLoader
+    @Inject lateinit var navigator: Navigator
 
+    private lateinit var backdropImage: ImageView
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var addressText: TextView
     private lateinit var categoriesText: TextView
@@ -44,6 +51,7 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_detail, container, false)
 
+        backdropImage = root.findViewById(R.id.backdrop)
         collapsingToolbar = root.findViewById(R.id.collapsing_toolbar)
         addressText = root.findViewById(R.id.address)
         categoriesText = root.findViewById(R.id.categories)
@@ -54,6 +62,8 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
         (activity as AppCompatActivity).setSupportActionBar(root.findViewById(R.id.toolbar))
         val actionBar = (activity as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.setHomeButtonEnabled(true)
+        setHasOptionsMenu(true)
 
         collapsingToolbar.setContentScrimColor(
             ContextCompat.getColor(
@@ -70,6 +80,13 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
             .observe(requireActivity(), Observer { state -> handleDetailState(state) })
         viewModel.start(venueId)
         return root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> navigator.back()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun handleDetailState(state: DetailState) {
@@ -92,6 +109,7 @@ class DetailFragment() : InjectableFragment<MapsActivity>() {
                 if (detail.description.isEmpty()) getString(R.string.detail_default) else detail.description
             websiteText.text =
                 if (detail.website.isEmpty()) getString(R.string.detail_default) else detail.website
+            imageLoader.loadImage(backdropImage, detail.photoUrl)
         }
     }
 

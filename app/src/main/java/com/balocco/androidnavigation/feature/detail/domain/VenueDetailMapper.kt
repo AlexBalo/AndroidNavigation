@@ -32,6 +32,12 @@ class VenueDetailMapper @Inject constructor() {
         venueDetailNew.rating = venue.rating?.toString() ?: ""
         venueDetailNew.description = venue.description ?: ""
         venueDetailNew.website = venue.url ?: ""
+
+        val photo = venue.bestPhoto
+        if (photo != null) {
+            venueDetailNew.photoUrl = "${photo.prefix}${photo.width}x${photo.height}${photo.suffix}"
+        }
+
         return venueDetailNew
     }
 }

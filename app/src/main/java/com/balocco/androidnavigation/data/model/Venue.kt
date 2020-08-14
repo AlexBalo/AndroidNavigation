@@ -10,5 +10,6 @@ data class Venue(
     @SerializedName("url") val url: String?,
     @SerializedName("description") val description: String?,
     @SerializedName("rating") val rating: Double?,
+    @SerializedName("bestPhoto") val bestPhoto: VenuePhoto?,
     @SerializedName("venuePage") val venuePage: VenuePage?
 )
