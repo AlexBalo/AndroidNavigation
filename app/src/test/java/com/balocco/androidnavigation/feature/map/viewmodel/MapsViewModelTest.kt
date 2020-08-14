@@ -26,7 +26,9 @@ class MapsViewModelTest {
     private lateinit var viewModel: MapsViewModel
 
     @Captor private lateinit var userLocationCaptor: ArgumentCaptor<UserLocationState>
+    @Captor private lateinit var mapLayerOverlayCaptor: ArgumentCaptor<MapLayerOverlayState>
     @Mock private lateinit var userLocationObserver: Observer<UserLocationState>
+    @Mock private lateinit var mapLayerOverlayObserver: Observer<MapLayerOverlayState>
     @Mock private lateinit var userLocationLocalDataSource: UserLocationLocalDataSource
     @Mock private lateinit var locationPermissionGrantedUseCase: LocationPermissionGrantedUseCase
 
@@ -40,6 +42,7 @@ class MapsViewModelTest {
                 locationPermissionGrantedUseCase
             )
         viewModel.userLocationState().observeForever(userLocationObserver)
+        viewModel.mapLayerOverlayState().observeForever(mapLayerOverlayObserver)
     }
 
     @Test
@@ -70,6 +73,20 @@ class MapsViewModelTest {
     }
 
     @Test
+    fun `When map ready permission granted and location available, notifies venues map layer`() {
+        val location = Location(90.0, 130.0)
+        whenever(locationPermissionGrantedUseCase()).thenReturn(true)
+        whenever(userLocationLocalDataSource.locationObservable())
+            .thenReturn(Observable.just(location))
+
+        viewModel.onMapReady()
+
+        verify(mapLayerOverlayObserver).onChanged(mapLayerOverlayCaptor.capture())
+        val state = mapLayerOverlayCaptor.value
+        assertEquals(MapLayerOverlayState.Layer.VENUES, state.layer)
+    }
+
+    @Test
     fun `When map ready permission granted and location null, notifies with null location`() {
         whenever(locationPermissionGrantedUseCase()).thenReturn(true)
         whenever(userLocationLocalDataSource.locationObservable())
@@ -94,6 +111,15 @@ class MapsViewModelTest {
     }
 
     @Test
+    fun `When location permission result with denied, notifies venues layey`() {
+        viewModel.onLocationPermissionResult(false)
+
+        verify(mapLayerOverlayObserver).onChanged(mapLayerOverlayCaptor.capture())
+        val state = mapLayerOverlayCaptor.value
+        assertEquals(MapLayerOverlayState.Layer.VENUES, state.layer)
+    }
+
+    @Test
     fun `When location permission result with granted, fetches location and returns it`() {
         val location = Location(90.0, 130.0)
         whenever(locationPermissionGrantedUseCase()).thenReturn(true)
@@ -109,5 +135,22 @@ class MapsViewModelTest {
         val state = userLocationCaptor.value
         assertEquals(UserLocationState.State.LOCATION_AVAILABLE, state.state)
         assertEquals(state.userLocation, location)
+    }
+
+    @Test
+    fun `When location permission result with granted, fetches location notifies venue map layer`() {
+        val location = Location(90.0, 130.0)
+        whenever(locationPermissionGrantedUseCase()).thenReturn(true)
+        whenever(userLocationLocalDataSource.locationObservable()).thenReturn(
+            Observable.just(
+                location
+            )
+        )
+
+        viewModel.onLocationPermissionResult(true)
+
+        verify(mapLayerOverlayObserver).onChanged(mapLayerOverlayCaptor.capture())
+        val state = mapLayerOverlayCaptor.value
+        assertEquals(MapLayerOverlayState.Layer.VENUES, state.layer)
     }
 }
