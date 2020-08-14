@@ -11,14 +11,20 @@ object TestUtils {
         id: String = "1",
         name: String = "Name",
         formattedAddress: List<String> = listOf(),
-        categories: List<VenueCategory> = listOf()
+        categories: List<VenueCategory> = listOf(),
+        rating: Double = 9.0,
+        description: String = "This is the description",
+        url: String = ""
     ): Venue =
         Venue(
             id = id,
             name = name,
             location = createVenueLocation(formattedAddress),
             categories = categories,
-            venuePage = null
+            venuePage = null,
+            url = url,
+            description = description,
+            rating = rating
         )
 
     fun createVenueCategory(

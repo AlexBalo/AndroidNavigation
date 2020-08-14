@@ -1,8 +1,10 @@
 package com.balocco.androidnavigation.data.remote
 
+import com.balocco.androidnavigation.data.remote.response.VenueResponseWrapper
 import com.balocco.androidnavigation.data.remote.response.VenuesResponseWrapper
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL_INTERNAL = "https://api.foursquare.com/"
@@ -16,6 +18,13 @@ interface RemoteDataSource {
         @Query("categoryId") categoryId: String,
         @Query("limit") limit: Int = 20
     ): Single<VenuesResponseWrapper>
+
+
+    @GET("${API_VERSION}/venues/{venueId}")
+    fun fetchVenueDetail(
+        @Path("venueId") venueId: String
+    ): Single<VenueResponseWrapper>
+
 
     companion object {
         const val BASE_URL = BASE_URL_INTERNAL

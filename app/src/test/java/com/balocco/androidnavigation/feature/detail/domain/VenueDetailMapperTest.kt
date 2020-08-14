@@ -1,4 +1,4 @@
-package com.balocco.androidnavigation.feature.venues.domain
+package com.balocco.androidnavigation.feature.detail.domain
 
 import com.balocco.androidnavigation.TestUtils
 import com.balocco.androidnavigation.feature.detail.viewmodel.VenueDetail
@@ -15,7 +15,8 @@ class VenueDetailMapperTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        mapper = VenueDetailMapper()
+        mapper =
+            VenueDetailMapper()
     }
 
     @Test
@@ -59,5 +60,44 @@ class VenueDetailMapperTest {
         val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
 
         assertEquals("Category1, Category2", venueDetail.categories)
+    }
+
+    @Test
+    fun `When map from venue, returns venue detail with rating`() {
+        val venue = TestUtils.createVenue(
+            id = "123",
+            name = "VenueName",
+            rating = 9.0
+        )
+
+        val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
+
+        assertEquals("9.0", venueDetail.rating)
+    }
+
+    @Test
+    fun `When map from venue, returns venue detail with description`() {
+        val venue = TestUtils.createVenue(
+            id = "123",
+            name = "VenueName",
+            description = "This is description"
+        )
+
+        val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
+
+        assertEquals("This is description", venueDetail.description)
+    }
+
+    @Test
+    fun `When map from venue, returns venue detail with website url`() {
+        val venue = TestUtils.createVenue(
+            id = "123",
+            name = "VenueName",
+            url = "http://www.example.com"
+        )
+
+        val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
+
+        assertEquals("http://www.example.com", venueDetail.website)
     }
 }
