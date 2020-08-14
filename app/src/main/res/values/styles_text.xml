@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DetailTitleTextStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/two_and_quarter_unit_sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginStart">@dimen/two_unit_dp</item>
+        <item name="android:layout_marginBottom">@dimen/one_unit_dp</item>
+    </style>
+
+    <style name="DetailDescriptionTextStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/two_unit_sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:layout_marginStart">@dimen/two_unit_dp</item>
+        <item name="android:layout_marginEnd">@dimen/two_unit_dp</item>
+        <item name="android:layout_marginBottom">@dimen/one_unit_dp</item>
+    </style>
+
+</resources>

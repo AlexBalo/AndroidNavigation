@@ -26,11 +26,7 @@ class NearbyVenuesProviderTest {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        nearbyVenuesProvider =
-            NearbyVenuesProvider(
-                venuesLocalDataSource,
-                venueWithinRadiusUseCase
-            )
+        nearbyVenuesProvider = NearbyVenuesProvider(venuesLocalDataSource, venueWithinRadiusUseCase)
     }
 
     @Test fun `When venues from local storage available, returns only venues in range`() {
@@ -39,34 +35,15 @@ class NearbyVenuesProviderTest {
         val venue2 = TestUtils.createVenue("2")
         mapAlreadyInStorage["1"] = venue1
         mapAlreadyInStorage["2"] = venue2
-        whenever(venuesLocalDataSource.venuesStorageObservable())
-            .thenReturn(Observable.just(HashMap()))
+        whenever(venuesLocalDataSource.venuesObservable()).thenReturn(Observable.just(HashMap()))
         whenever(venuesLocalDataSource.loadVenues()).thenReturn(mapAlreadyInStorage)
-        whenever(
-            venueWithinRadiusUseCase(
-                venue1,
-                CENTER,
-                RADIUS
-            )
-        ).thenReturn(true)
-        whenever(
-            venueWithinRadiusUseCase(
-                venue2,
-                CENTER,
-                RADIUS
-            )
-        ).thenReturn(false)
+        whenever(venueWithinRadiusUseCase(venue1, CENTER, RADIUS)).thenReturn(true)
+        whenever(venueWithinRadiusUseCase(venue2, CENTER, RADIUS)).thenReturn(false)
         val testObserver = nearbyVenuesProvider.venuesObservable().test()
 
-        nearbyVenuesProvider.updateProximityInfo(
-            CENTER,
-            RADIUS
-        )
+        nearbyVenuesProvider.updateProximityInfo(CENTER, RADIUS)
 
-        testObserver.assertValues(
-            listOf(),
-            listOf(venue1)
-        )
+        testObserver.assertValues(listOf(), listOf(venue1))
     }
 
     @Test fun `When new venues available, returns venues in range`() {
@@ -75,21 +52,14 @@ class NearbyVenuesProviderTest {
         val venue2 = TestUtils.createVenue("2")
         newVenues["1"] = venue1
         newVenues["2"] = venue2
-        whenever(venuesLocalDataSource.venuesStorageObservable())
-            .thenReturn(Observable.just(newVenues))
+        whenever(venuesLocalDataSource.venuesObservable()).thenReturn(Observable.just(newVenues))
         whenever(venuesLocalDataSource.loadVenues()).thenReturn(HashMap())
         whenever(venueWithinRadiusUseCase(eq(venue1), any(), any())).thenReturn(true)
         whenever(venueWithinRadiusUseCase(eq(venue2), any(), any())).thenReturn(true)
         val testObserver = nearbyVenuesProvider.venuesObservable().test()
 
-        nearbyVenuesProvider.updateProximityInfo(
-            CENTER,
-            RADIUS
-        )
+        nearbyVenuesProvider.updateProximityInfo(CENTER, RADIUS)
 
-        testObserver.assertValues(
-            listOf(venue1, venue2),
-            listOf()
-        )
+        testObserver.assertValues(listOf(venue1, venue2), listOf())
     }
 }
