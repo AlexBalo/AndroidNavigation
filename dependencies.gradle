@@ -38,6 +38,7 @@ ext {
 
       // Square
       okhttp              : "4.8.0",
+      picasso             : "2.71828",
       retrofit            : "2.9.0",
 
       // Misc
@@ -93,6 +94,7 @@ ext {
           squareup    : [
               gsonconverter     : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
               logginginterceptor: "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
+              picasso           : "com.squareup.picasso:picasso:${versions.picasso}",
               retrofit          : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
               rxadapter         : "com.squareup.retrofit2:adapter-rxjava3:${versions.retrofit}"
           ]

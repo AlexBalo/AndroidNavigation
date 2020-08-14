@@ -7,5 +7,6 @@ data class VenueDetail(
     var categories: String = "",
     var rating: String = "",
     var description: String = "",
-    var website: String = ""
+    var website: String = "",
+    var photoUrl: String = ""
 )

@@ -1,6 +1,7 @@
 package com.balocco.androidnavigation.feature.detail.domain
 
 import com.balocco.androidnavigation.TestUtils
+import com.balocco.androidnavigation.data.model.VenuePhoto
 import com.balocco.androidnavigation.feature.detail.viewmodel.VenueDetail
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -99,5 +100,38 @@ class VenueDetailMapperTest {
         val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
 
         assertEquals("http://www.example.com", venueDetail.website)
+    }
+
+    @Test
+    fun `When map from venue without photo, returns venue with empty photo url`() {
+        val venue = TestUtils.createVenue(
+            id = "123",
+            name = "VenueName",
+            url = "http://www.example.com"
+        )
+
+        val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
+
+        assertEquals("", venueDetail.photoUrl)
+    }
+
+    @Test
+    fun `When map from venue with photo, returns venue with photo url`() {
+        val venuePhoto = VenuePhoto(
+            prefix = "prefix/",
+            suffix = "/suffix",
+            width = 123,
+            height = 123
+        )
+        val venue = TestUtils.createVenue(
+            id = "123",
+            name = "VenueName",
+            url = "http://www.example.com",
+            venuePhoto = venuePhoto
+        )
+
+        val venueDetail = mapper.mapFromVenue(VenueDetail(), venue)
+
+        assertEquals("prefix/123x123/suffix", venueDetail.photoUrl)
     }
 }

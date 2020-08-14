@@ -1,9 +1,8 @@
 package com.balocco.androidnavigation.di
 
 import com.balocco.androidcomponents.di.ApplicationScope
-import com.balocco.androidnavigation.data.remote.AuthInterceptor
-import com.balocco.androidnavigation.data.remote.RemoteDataSource
-import com.balocco.androidnavigation.data.remote.VersionInterceptor
+import com.balocco.androidnavigation.data.remote.*
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -61,4 +60,14 @@ class NetworkModule {
     @ApplicationScope
     fun provideRemoteDataSource(retrofit: Retrofit):
             RemoteDataSource = retrofit.create(RemoteDataSource::class.java)
+
+    @Provides
+    @ApplicationScope
+    fun providePicasso(): Picasso = Picasso.get()
+
+    @Provides
+    @ApplicationScope
+    fun provideImageLoader(
+        picasso: Picasso
+    ): ImageLoader = PicassoImageLoader(picasso)
 }

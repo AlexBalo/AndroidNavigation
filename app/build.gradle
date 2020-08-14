@@ -57,6 +57,7 @@ dependencies {
 
     implementation deps.app.squareup.gsonconverter
     implementation deps.app.squareup.logginginterceptor
+    implementation deps.app.squareup.picasso
     implementation deps.app.squareup.retrofit
     implementation deps.app.squareup.rxadapter
 

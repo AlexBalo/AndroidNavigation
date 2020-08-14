@@ -1,9 +1,6 @@
 package com.balocco.androidnavigation
 
-import com.balocco.androidnavigation.data.model.Icon
-import com.balocco.androidnavigation.data.model.Venue
-import com.balocco.androidnavigation.data.model.VenueCategory
-import com.balocco.androidnavigation.data.model.VenueLocation
+import com.balocco.androidnavigation.data.model.*
 
 object TestUtils {
 
@@ -14,7 +11,8 @@ object TestUtils {
         categories: List<VenueCategory> = listOf(),
         rating: Double = 9.0,
         description: String = "This is the description",
-        url: String = ""
+        url: String = "",
+        venuePhoto: VenuePhoto? = null
     ): Venue =
         Venue(
             id = id,
@@ -24,7 +22,8 @@ object TestUtils {
             venuePage = null,
             url = url,
             description = description,
-            rating = rating
+            rating = rating,
+            bestPhoto = venuePhoto
         )
 
     fun createVenueCategory(
