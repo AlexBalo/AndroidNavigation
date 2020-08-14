@@ -1,6 +1,8 @@
-package com.balocco.androidnavigation.map
+package com.balocco.androidnavigation.feature.venues.ui
 
 import com.balocco.androidnavigation.data.model.Venue
+import com.balocco.androidnavigation.map.MapVenuesDisplayer
+import com.balocco.androidnavigation.map.Marker
 import javax.inject.Inject
 
 class VenuesLayer @Inject constructor(
@@ -10,7 +12,13 @@ class VenuesLayer @Inject constructor(
     fun newVenuesAvailable(venues: List<Venue>) {
         mapVenuesDisplayer.clearVenues()
         val markers = mutableListOf<Marker>()
-        venues.forEach { venue -> markers.add(VenueMarker(venue)) }
+        venues.forEach { venue ->
+            markers.add(
+                VenueMarker(
+                    venue
+                )
+            )
+        }
         mapVenuesDisplayer.showMarkers(markers)
     }
 

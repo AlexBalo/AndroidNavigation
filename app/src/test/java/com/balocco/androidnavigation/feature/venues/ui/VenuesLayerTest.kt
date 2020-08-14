@@ -1,6 +1,8 @@
-package com.balocco.androidnavigation.map
+package com.balocco.androidnavigation.feature.venues.ui
 
 import com.balocco.androidnavigation.TestUtils
+import com.balocco.androidnavigation.map.MapVenuesDisplayer
+import com.balocco.androidnavigation.map.Marker
 import com.nhaarman.mockito_kotlin.capture
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
@@ -21,7 +23,9 @@ class VenuesLayerTest {
     @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        layer = VenuesLayer(mapVenuesDisplayer)
+        layer = VenuesLayer(
+            mapVenuesDisplayer
+        )
     }
 
     @Test fun `When new venues available, clear venues`() {

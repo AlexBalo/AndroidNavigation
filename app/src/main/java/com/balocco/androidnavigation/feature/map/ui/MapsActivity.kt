@@ -19,6 +19,7 @@ import com.balocco.androidnavigation.feature.map.viewmodel.UserLocationState.Sta
 import com.balocco.androidnavigation.feature.venues.ui.VenuesFragment
 import com.balocco.androidnavigation.map.*
 import com.balocco.androidnavigation.map.Map
+import com.balocco.androidnavigation.map.google.GoogleMapWrapper
 import com.google.android.gms.maps.SupportMapFragment
 import javax.inject.Inject
 
@@ -44,7 +45,13 @@ class MapsActivity : BaseActivity(),
         setContentView(R.layout.activity_maps)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync { googleMap -> handleMapReadyEvent(GoogleMapWrapper(googleMap)) }
+        mapFragment.getMapAsync { googleMap ->
+            handleMapReadyEvent(
+                GoogleMapWrapper(
+                    googleMap
+                )
+            )
+        }
 
         viewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(MapsViewModel::class.java)

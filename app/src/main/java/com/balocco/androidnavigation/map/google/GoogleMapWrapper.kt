@@ -1,7 +1,9 @@
-package com.balocco.androidnavigation.map
+package com.balocco.androidnavigation.map.google
 
 import android.annotation.SuppressLint
 import com.balocco.androidnavigation.data.model.Location
+import com.balocco.androidnavigation.map.Map
+import com.balocco.androidnavigation.map.Marker
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -41,14 +43,22 @@ class GoogleMapWrapper(
 
     override fun setMapMarkerClickedListener() {
         googleMap.setOnMarkerClickListener { marker ->
-            mapMarkerClickedObservable.onNext(GoogleMapMarker(marker))
+            mapMarkerClickedObservable.onNext(
+                GoogleMapMarker(
+                    marker
+                )
+            )
             true
         }
     }
 
     override fun setMapInfoBubbleClickListener() {
         googleMap.setOnInfoWindowClickListener { marker ->
-            mapMarkerClickedObservable.onNext(GoogleMapMarker(marker))
+            mapMarkerInfoBubbleClickedObservable.onNext(
+                GoogleMapMarker(
+                    marker
+                )
+            )
         }
     }
 

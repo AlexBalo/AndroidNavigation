@@ -1,7 +1,8 @@
-package com.balocco.androidnavigation.map
+package com.balocco.androidnavigation.feature.venues.ui
 
 import com.balocco.androidnavigation.data.model.Location
 import com.balocco.androidnavigation.data.model.Venue
+import com.balocco.androidnavigation.map.Marker
 
 class VenueMarker(
     private val venue: Venue

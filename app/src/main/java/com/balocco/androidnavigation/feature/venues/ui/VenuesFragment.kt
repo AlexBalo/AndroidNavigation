@@ -10,12 +10,13 @@ import com.balocco.androidnavigation.R
 import com.balocco.androidnavigation.common.navigation.Navigator
 import com.balocco.androidnavigation.common.ui.InjectableFragment
 import com.balocco.androidnavigation.common.viewmodel.ViewModelFactory
+import com.balocco.androidnavigation.data.model.Venue
+import com.balocco.androidnavigation.feature.detail.ui.DetailFragment
 import com.balocco.androidnavigation.feature.map.ui.MapsActivity
 import com.balocco.androidnavigation.feature.venues.viewmodel.NearbyVenuesState
 import com.balocco.androidnavigation.feature.venues.viewmodel.VenuesViewModel
 import com.balocco.androidnavigation.map.MapInfoProvider
 import com.balocco.androidnavigation.map.MapInteractor
-import com.balocco.androidnavigation.map.VenuesLayer
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
@@ -70,13 +71,14 @@ class VenuesFragment() : InjectableFragment<MapsActivity>() {
             )
         }.addTo(compositeDisposable)
 
-        mapInteractor.mapMarkerClickedObservable().subscribe() { marker ->
+        mapInteractor.mapMarkerClickedObservable().subscribe { marker ->
             venuesLayer.markerClicked(marker)
         }.addTo(compositeDisposable)
 
-        mapInteractor.mapMarkerInfoBubbleClickedObservable().subscribe() { marker ->
-//                val detailFragment = DetailFragment()
-//                navigator.navigate(detailFragment)
+        mapInteractor.mapMarkerInfoBubbleClickedObservable().subscribe { marker ->
+            val venue = marker.tag() as Venue
+            val detailFragment = DetailFragment.newInstance(venueId = venue.id)
+            navigator.navigate(fragment = detailFragment)
         }.addTo(compositeDisposable)
     }
 
