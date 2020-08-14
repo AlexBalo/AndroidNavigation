@@ -1,6 +1,7 @@
-package com.balocco.androidnavigation.map
+package com.balocco.androidnavigation.map.google
 
 import com.balocco.androidnavigation.data.model.Location
+import com.balocco.androidnavigation.map.Marker
 
 class GoogleMapMarker(
     private val marker: com.google.android.gms.maps.model.Marker

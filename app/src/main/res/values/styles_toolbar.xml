@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CollapsingToolbarExpandedAppBarTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/three_unit_sp</item>
+    </style>
+
+    <style name="CollapsingToolbarCollapsedAppBarTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/two_unit_sp</item>
+    </style>
+
+</resources>

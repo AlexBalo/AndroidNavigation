@@ -13,5 +13,5 @@ abstract class VenuesViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(VenuesViewModel::class)
-    abstract fun bindVenuesViewModel(mapsViewModel: VenuesViewModel): ViewModel
+    abstract fun bindVenuesViewModel(venuesViewModel: VenuesViewModel): ViewModel
 }
