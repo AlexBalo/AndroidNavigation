@@ -14,11 +14,19 @@ class VenuesLocalDataSourceImplTest {
         venuesLocalDataSource = VenuesLocalDataSourceImpl()
     }
 
+    @Test fun `When loading venue with id, returns locally stored venue`() {
+        val venue = TestUtils.createVenue("1")
+        val venues = listOf(venue)
+        venuesLocalDataSource.storeVenues(venues).test()
+
+        venuesLocalDataSource.loadVenue("1").test().assertValue(venue)
+    }
+
     @Test fun `When storing venues, observer is notified with stored venues`() {
         val venue1 = TestUtils.createVenue("1")
         val venue2 = TestUtils.createVenue("2")
         val venues = listOf(venue1, venue2)
-        val testObserver = venuesLocalDataSource.venuesStorageObservable().test()
+        val testObserver = venuesLocalDataSource.venuesObservable().test()
 
         venuesLocalDataSource.storeVenues(venues).test()
 

@@ -22,7 +22,7 @@ class NearbyVenuesProvider @Inject constructor(
     fun venuesObservable(): @NonNull Observable<List<Venue>> {
         val venuesObservable = venuesSubject.map { map -> map.values }
         val venuesFromStorage =
-            venuesLocalDataSource.venuesStorageObservable().map { map -> map.values }
+            venuesLocalDataSource.venuesObservable().map { map -> map.values }
         return Observable.merge(venuesObservable, venuesFromStorage)
             .map { venue -> venue.filter { venueToFilter -> isVenueWithinRadius(venueToFilter) } }
     }
