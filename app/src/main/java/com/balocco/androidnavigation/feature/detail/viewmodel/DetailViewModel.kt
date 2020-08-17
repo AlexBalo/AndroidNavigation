@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.balocco.androidcomponents.common.scheduler.SchedulerProvider
 import com.balocco.androidnavigation.common.viewmodel.BaseViewModel
-import com.balocco.androidnavigation.data.model.Venue
 import com.balocco.androidnavigation.feature.detail.domain.FetchVenueDetailUseCase
 import com.balocco.androidnavigation.feature.detail.domain.LoadVenueUseCase
 import com.balocco.androidnavigation.feature.detail.domain.VenueDetailMapper
@@ -28,6 +27,7 @@ class DetailViewModel @Inject constructor(
         loadVenueUseCase(venueId)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
+            .map { venue -> venueDetailMapper.mapFromVenue(venueDetail, venue) }
             .subscribe(
                 { venue -> handleLocalVenueResult(venue) },
                 { detailState.value = DetailState(DetailState.State.ERROR, venueDetail) }
@@ -39,6 +39,7 @@ class DetailViewModel @Inject constructor(
         fetchVenueDetailUseCase(venueId)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
+            .map { venue -> venueDetailMapper.mapFromVenue(venueDetail, venue) }
             .subscribe(
                 { venue -> handleLocalVenueResult(venue) },
                 { detailState.value = DetailState(DetailState.State.ERROR, venueDetail) }
@@ -46,8 +47,8 @@ class DetailViewModel @Inject constructor(
             .addTo(compositeDisposable)
     }
 
-    private fun handleLocalVenueResult(venue: Venue) {
-        venueDetail = venueDetailMapper.mapFromVenue(venueDetail, venue)
+    private fun handleLocalVenueResult(venue: VenueDetail) {
+        venueDetail = venue
         detailState.value = DetailState(DetailState.State.SUCCESS, venueDetail)
     }
 }
